@@ -1,19 +1,19 @@
 <template>
   <div class="container">
-    <div class="row pt-4">
+    <div class="row pt-2">
       <div class="col-lg-6 offset-lg-3">
         <p class="text-center"><img src="./assets/logo.png"></p>
         <div class="card">
           <ol class="list-group list-group-flush">
-            <list-item v-for="item in items" v-bind:todo="item"></list-item>
+            <list-item v-for="item in items" :todo="item" :key="item.id"></list-item>
           </ol>
           <div class="card-block">
-            <div class="alert alert-danger" v-show="flashMsg">
-              {{flashMsg}}
-            </div>
-            <input v-model="newItem" class="form-control" autofocus="true" />
-            <br/>
-            <button @click="addToList()" class="btn btn-block btn-success">+ Add Item</button>
+            <form @submit.prevent="addToList()">
+              <div class="form-group">
+                <input v-model="newItem" class="form-control" placeholder="Add todo item..." autofocus="true" />
+              </div>
+              <button type="submit" :disabled="!newItem" class="btn btn-block btn-success">+ Add Item</button>
+            </form>
           </div>
         </div>
       </div>
@@ -27,8 +27,7 @@
     data () {
       return {
         items: [],
-        newItem: '',
-        flashMsg: ''
+        newItem: ''
       }
     },
     mounted () {
@@ -36,15 +35,10 @@
     },
     methods: {
       addToList: function() {
-        if (this.newItem != '') {
-          this.items.push({
-            text: this.newItem
-          })
-          this.newItem = ''
-          this.flashMsg = ''
-        } else {
-          this.flashMsg = 'Please enter a todo item!'
-        }
+        this.items.push({
+          text: this.newItem
+        })
+        this.newItem = ''
       },
       getItems: function() {
         this.items = [
