@@ -15,6 +15,8 @@ module.exports = {
         loader: 'vue-loader',
         options: {
           loaders: {
+            'scss': 'vue-style-loader!css-loader!sass-loader',
+            'sass': 'vue-style-loader!css-loader!sass-loader?indentedSyntax'
           }
           // other vue-loader options go here
         }
@@ -30,9 +32,19 @@ module.exports = {
         options: {
           name: '[name].[ext]?[hash]'
         }
+      },
+      {
+        test: /\.scss$/,
+        loader: 'style-loader!css-loader!sass-loader'
       }
     ]
   },
+  plugins: [
+    new webpack.ProvidePlugin({
+      $: 'jquery', jQuery: 'jquery',
+      Tether: 'tether', tether: 'tether'
+    }),
+  ],
   resolve: {
     alias: {
       'vue$': 'vue/dist/vue.esm.js'
