@@ -2,10 +2,10 @@
   <div class="container">
     <div class="row pt-2">
       <div class="col-lg-6 offset-lg-3">
-        <p class="text-center"><img src="./assets/logo.png"></p>
+        <p class="text-center"><img src="./assets/logo.png" class="img-fluid"></p>
         <div class="card">
           <ol class="list-group list-group-flush">
-            <list-item v-for="item in items" :todo="item" :key="item.id"></list-item>
+            <list-item v-for="(item,index) in items" :todo="item" :index="index" :key="item.id"></list-item>
           </ol>
           <div class="card-block">
             <form @submit.prevent="addToList()">
@@ -22,13 +22,20 @@
 </template>
 
 <script>
+  import { EventBus } from './main'
+
   export default {
-    name: 'app',
     data () {
       return {
         items: [],
         newItem: ''
       }
+    },
+    created: function() {
+      var this_1 = this;
+      EventBus.$on('deletedindex', function(index) {
+        this_1.deleteItemfromList(index);
+      })
     },
     mounted () {
       this.getItems()
@@ -48,6 +55,9 @@
           { text: 'Pay bills' },
           { text: 'Get things working' }
         ]
+      },
+      deleteItemfromList: function(index) {
+        this.items.splice(index,1);
       }
     }
   }
